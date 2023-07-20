@@ -1,42 +1,42 @@
 <?php
     include ("connection.php");
 
-    if(isset($_POST["email"]) && $_POST["email"] != ""){
-        $email = trim($_POST["email"]);
+    header("Content-Type: application/json");
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    $response = [];
+    if(isset($data["email"]) && $data["email"] != ""){
+        $email = trim($data["email"]);
+        $password_user = trim($data["password"]);
         $query = $conn -> prepare("SELECT * FROM users WHERE email = ?");
         $query -> bind_param("s", $email);
         $query->execute();
 
-        $array = $query->get_result();
-        $response = [];
-        $users = [];
-        while($article = $array->fetch_assoc()){
-            $users[] = $article;
-        }
-        
-        if($users){
-            if(isset($_POST["password"]) && $_POST["password"] != ""){
-                $password = trim($_POST["password"]);
-                if($users[0]["password"] == $password){
-                    $response["success"] = true;
-                    echo json_encode($response);
-                }
-                else{
-                    $response["success"] = "wrong password";
-                    echo json_encode($response);
-                }
+        $query->store_result();
+        $query->bind_result($id, $email, $password, $name);
+        $query->fetch();
+
+        $num_rows = $query->num_rows();
+        if ($num_rows == 0) {
+            $response["success"] = false;
+            $response['status'] = "user not found";
+        } else {
+            if ($password == $password_user) {
+                $response["success"] = true;
+                $response['status'] = 'logged in';
+                $response['user_id'] = $id;
+                $response['email'] = $email;
+                $response['name'] = $name;
+            } else {
+                $response["success"] = false;
+                $response['status'] = "wrong password";
             }
         }
-        else{
-            $response["success"] = "no user found";
-            echo json_encode($response);
-        }
-
     }
     else{
-        $response = [];
-        $response["success"] = false;   
-        echo json_encode($response);
-        return;
+        $response["success"] = false;
+        $response['status'] = "Empty";
     }
+
+    echo json_encode($response);
 ?>

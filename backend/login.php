@@ -7,13 +7,13 @@
     $response = [];
     if(isset($data["email"]) && $data["email"] != ""){
         $email = trim($data["email"]);
-        $password_user = trim($data["password"]);
+        $password = trim($data["password"]);
         $query = $conn -> prepare("SELECT * FROM users WHERE email = ?");
         $query -> bind_param("s", $email);
         $query->execute();
 
         $query->store_result();
-        $query->bind_result($id, $email, $password, $name);
+        $query->bind_result($id, $email, $hashed_password, $name);
         $query->fetch();
 
         $num_rows = $query->num_rows();
@@ -21,7 +21,7 @@
             $response["success"] = false;
             $response['status'] = "user not found";
         } else {
-            if ($password == $password_user) {
+            if (password_verify($password,$hashed_password)) {
                 $response["success"] = true;
                 $response['status'] = 'logged in';
                 $response['user_id'] = $id;

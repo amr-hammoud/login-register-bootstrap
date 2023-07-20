@@ -23,15 +23,15 @@
             $query->execute();
     
             $response["success"] = true;
-            $response["message"] = "another message in success";
+            $response["message"] = "Account Created Successfully";
         } else {
             $response["success"] = false;
-            $response["message"] = "another message in fail";
+            $response["message"] = "Email Already Registered";
         }
     }
     else{
         $response["success"] = false;
-        $response['status'] = "Empty";
+        $response['message'] = "Please Input Email";
     }
 
     echo json_encode($response);

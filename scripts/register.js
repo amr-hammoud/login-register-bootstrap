@@ -33,7 +33,7 @@ function registerUser(e) {
                     localStorage.setItem("name", json["name"]);
                     window.location.href = "index.html"
                 } else {
-                    console.log("Register Failed");
+                    console.log(json["message"]);
                 }
             })
             .catch((error) => console.log(error));

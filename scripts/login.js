@@ -29,6 +29,7 @@ function loginUser(e) {
             console.log(json);
             if (json["success"] === true) {
                 console.log("Login Success");
+				localStorage.setItem("name", json["name"]);
                 window.location.href = "dashboard.html"
             } else {
                 console.log("Login Failed");

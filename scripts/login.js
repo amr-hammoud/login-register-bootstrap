@@ -33,7 +33,7 @@ function loginUser(e) {
 					localStorage.setItem("name", json["name"]);
 					window.location.href = "dashboard.html"
 				} else {
-					console.log("Login Failed");
+					loginFailed(json["message"])
 				}
 			})
 			.catch((error) => console.log(error));
@@ -56,4 +56,9 @@ function checkInput(email, password){
         }
     
     return email_valid && password_valid
+}
+
+
+function loginFailed(message){
+	document.getElementById("error-message").innerHTML = message
 }

@@ -57,7 +57,7 @@ function checkInput(name, email, password, confirm_password){
             email_valid = true
         
         }
-        if (password.length() >=8 && password === confirm_password){
+        if (password.length >=8 && password === confirm_password){
             password_valid = true
         }
     

@@ -19,23 +19,23 @@
         $num_rows = $query->num_rows();
         if ($num_rows == 0) {
             $response["success"] = false;
-            $response['status'] = "user not found";
+            $response['message'] = "User Not Found";
         } else {
             if (password_verify($password,$hashed_password)) {
                 $response["success"] = true;
-                $response['status'] = 'logged in';
+                $response['message'] = 'Logged In';
                 $response['user_id'] = $id;
                 $response['email'] = $email;
                 $response['name'] = $name;
             } else {
                 $response["success"] = false;
-                $response['status'] = "wrong password";
+                $response['message'] = "Wrong Password";
             }
         }
     }
     else{
         $response["success"] = false;
-        $response['status'] = "Empty";
+        $response['message'] = "Empty Request";
     }
 
     echo json_encode($response);
